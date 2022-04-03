@@ -1,0 +1,19 @@
+server:
+  port: 8087
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ead_auth_user
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      # todas as alterações feitas no mapeamento de código será refletido no banco de dados
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        # desabilitando erros de logs durante consulta de metadados do banco de dados
+        lob.non-contextual-creation: true
+    properties:
+      hibernate:
+        show_sql: true
