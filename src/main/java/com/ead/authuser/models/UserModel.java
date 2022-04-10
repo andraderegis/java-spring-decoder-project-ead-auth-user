@@ -19,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.Data;
 
 @Data
@@ -30,7 +33,7 @@ public class UserModel implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID userId;
+  private UUID id;
 
   @Column(nullable = false, unique = true, length = 50)
   private String username;
@@ -47,14 +50,14 @@ public class UserModel implements Serializable {
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private UserStatus userStatus;
+  private UserStatus status;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private UserType userType;
+  private UserType type;
 
   @Column(length = 20)
-  private String phoneNunber;
+  private String phoneNumber;
 
   @Column(length = 11)
   private String cpf;
@@ -64,10 +67,12 @@ public class UserModel implements Serializable {
 
   @Column(nullable = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+  @CreationTimestamp
   private LocalDateTime createdAt;
 
   @Column(nullable = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+  @UpdateTimestamp
   private LocalDateTime updatedAt;
 
 }
