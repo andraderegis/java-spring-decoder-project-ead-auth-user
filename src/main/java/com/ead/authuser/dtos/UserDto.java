@@ -2,7 +2,10 @@ package com.ead.authuser.dtos;
 
 import java.util.UUID;
 
-import com.ead.authuser.enums.UserType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -13,7 +16,7 @@ import lombok.Data;
 public class UserDto {
 
   public interface UserView {
-    public static interface RegistragionPost {
+    public static interface RegistrationPost {
     }
 
     public static interface UserPut {
@@ -30,30 +33,40 @@ public class UserDto {
 
   // Usando o JsonView, podemos usar o mesmo DTO, porém com visões diferentes.
   // Essas visões foram definidas por meio das interfaces UserView e suas filhas
-  @JsonView(UserView.RegistragionPost.class)
+  @NotBlank(groups = UserView.RegistrationPost.class)
+  @Size(min = 4, max = 50, groups = UserView.RegistrationPost.class)
+  @JsonView(UserView.RegistrationPost.class)
   private String username;
 
-  @JsonView(UserView.RegistragionPost.class)
+  @NotBlank(groups = UserView.RegistrationPost.class)
+  @Size(max = 50, groups = UserView.RegistrationPost.class)
+  @Email
+  @JsonView(UserView.RegistrationPost.class)
   private String email;
 
-  @JsonView({ UserView.RegistragionPost.class, UserView.PasswordPut.class })
+  @NotBlank(groups = { UserView.RegistrationPost.class, UserView.PasswordPut.class })
+  @Size(min = 6, max = 20, groups = { UserView.RegistrationPost.class, UserView.PasswordPut.class })
+  @JsonView({ UserView.RegistrationPost.class, UserView.PasswordPut.class })
   private String password;
 
+  @NotBlank(groups = UserView.PasswordPut.class)
+  @Size(min = 6, max = 20, groups = UserView.PasswordPut.class)
   @JsonView(UserView.PasswordPut.class)
   private String oldPassword;
 
-  @JsonView(UserView.RegistragionPost.class)
-  private UserType type;
-
-  @JsonView({ UserView.RegistragionPost.class, UserView.UserPut.class })
+  @JsonView({ UserView.RegistrationPost.class, UserView.UserPut.class })
   private String fullName;
 
-  @JsonView({ UserView.RegistragionPost.class, UserView.UserPut.class })
+  @JsonView({ UserView.RegistrationPost.class, UserView.UserPut.class })
+  @Size(min = 10, max = 11, groups = { UserView.RegistrationPost.class, UserView.UserPut.class })
   private String phoneNumber;
 
-  @JsonView({ UserView.RegistragionPost.class, UserView.UserPut.class })
+  @JsonView({ UserView.RegistrationPost.class, UserView.UserPut.class })
+  @NotBlank(groups = { UserView.RegistrationPost.class, UserView.UserPut.class })
+  @Size(min = 11, max = 11, groups = { UserView.RegistrationPost.class, UserView.UserPut.class })
   private String cpf;
 
+  @NotBlank(groups = UserView.ImagePut.class)
   @JsonView(UserView.ImagePut.class)
   private String imageUrl;
 }
