@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.hateoas.RepresentationModel;
 
 import lombok.Data;
 
@@ -28,7 +29,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "USERS")
-public class UserModel implements Serializable {
+public class UserModel extends RepresentationModel<UserModel> implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
