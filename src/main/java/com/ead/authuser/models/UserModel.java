@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.ead.authuser.constants.DateTimeConstants;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,6 +27,7 @@ import org.springframework.hateoas.RepresentationModel;
 import lombok.Data;
 
 @Data
+// All null attribute are hidden
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "USERS")
@@ -67,12 +69,12 @@ public class UserModel extends RepresentationModel<UserModel> implements Seriali
   private String imageUrl;
 
   @Column(nullable = false)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeConstants.DATE_TIME_FORMAT)
   @CreationTimestamp
   private LocalDateTime createdAt;
 
   @Column(nullable = false)
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeConstants.DATE_TIME_FORMAT)
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
