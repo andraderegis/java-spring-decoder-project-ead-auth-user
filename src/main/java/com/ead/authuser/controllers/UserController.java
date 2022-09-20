@@ -9,6 +9,8 @@ import com.ead.authuser.services.UserService;
 import com.ead.authuser.specifications.SpecificationTemplate;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import lombok.extern.log4j.Log4j2;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Log4j2
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/users")
@@ -64,6 +67,8 @@ public class UserController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id) {
+    log.debug("DELETE deleteUser userId received {}", id);
+
     Optional<UserModel> userModelOptional = userService.findById(id);
 
     if (!userModelOptional.isPresent()) {
@@ -72,12 +77,18 @@ public class UserController {
 
     userService.delete(id);
 
+    log.debug("DELETE deleteUser userId {}", id);
+    log.info("User deleted successfully! - userId {}", id);
+
     return ResponseEntity.noContent().build();
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<Object> update(@PathVariable(value = "id") UUID id,
       @RequestBody @Validated(UserDto.UserView.UserPut.class) @JsonView(UserDto.UserView.UserPut.class) UserDto userDto) {
+
+    log.debug("PUT updateUser userDto received {}", userDto.toString());
+
     Optional<UserModel> userModelOptional = userService.findById(id);
 
     if (!userModelOptional.isPresent()) {
@@ -92,6 +103,9 @@ public class UserController {
 
     userService.save(userModel);
 
+    log.debug("PUT register updateUser updated {}", userModel.toString());
+    log.info("User updated successfully! - userId {}", userModel.getId());
+
     return ResponseEntity.ok().body(userModel);
   }
 
@@ -105,7 +119,8 @@ public class UserController {
     }
 
     if (!userModelOptional.get().getPassword().equals(userDto.getOldPassword())) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismatech old password.");
+      log.warn("Mismatched old password userId {}", userDto.getId());
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismatched old password.");
     }
 
     var userModel = userModelOptional.get();

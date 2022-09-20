@@ -26,6 +26,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import lombok.Data;
 
+// Lombok decorator. Avoid implement manual getters and setters
 @Data
 // All null attribute are hidden
 @JsonInclude(JsonInclude.Include.NON_NULL)
