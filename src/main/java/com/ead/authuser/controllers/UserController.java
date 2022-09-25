@@ -103,7 +103,7 @@ public class UserController {
 
     userService.save(userModel);
 
-    log.debug("PUT register updateUser updated {}", userModel.toString());
+    log.debug("PUT register userId updated {}", userModel.getId());
     log.info("User updated successfully! - userId {}", userModel.getId());
 
     return ResponseEntity.ok().body(userModel);
@@ -113,6 +113,7 @@ public class UserController {
   public ResponseEntity<Object> updatePassword(@PathVariable(value = "id") UUID id,
       @RequestBody @Validated(UserDto.UserView.PasswordPut.class) @JsonView(UserDto.UserView.PasswordPut.class) UserDto userDto) {
     Optional<UserModel> userModelOptional = userService.findById(id);
+    log.debug("PUT updatePassword userDto received {} ", userDto.toString());
 
     if (!userModelOptional.isPresent()) {
       return ResponseEntity.notFound().build();
@@ -129,6 +130,9 @@ public class UserController {
 
     userService.save(userModel);
 
+    log.debug("PUT updatePassword userId saved {} ", userModel.getId());
+    log.info("Password updated successfully userId {} ", userModel.getId());
+
     return ResponseEntity.ok().body("Password updated successfully.");
   }
 
@@ -136,6 +140,7 @@ public class UserController {
   public ResponseEntity<Object> updateImage(@PathVariable(value = "id") UUID id,
       @RequestBody @Validated(UserDto.UserView.ImagePut.class) @JsonView(UserDto.UserView.ImagePut.class) UserDto userDto) {
     Optional<UserModel> userModelOptional = userService.findById(id);
+    log.debug("PUT updateImage userDto received {} ", userDto.toString());
 
     if (!userModelOptional.isPresent()) {
       return ResponseEntity.notFound().build();
@@ -146,6 +151,9 @@ public class UserController {
     userModel.setImageUrl(userDto.getImageUrl());
 
     userService.save(userModel);
+
+    log.debug("PUT updateImage userId saved {} ", userModel.getId());
+    log.info("Image updated successfully userId {} ", userModel.getId());
 
     return ResponseEntity.ok().body("Image updated successfully.");
   }
